@@ -5,15 +5,15 @@ import java.util.List;
 
 public interface PersonRepository {
 
-    List<Person> getAll();
+    List<Product> getAll();
 
-    Person findById(int id);
+    void printProductsFromOrder(int id);
 
-    Person findByJobtitleNamePhoneEmail(String jobtitle, String name, String phone, String email);
+//    Person findByJobtitleNamePhoneEmail(String jobtitle, String name, String phone, String email);
 
-    Person update(Person person);
+//    Person update(Person person);
 
-    int remove(int id);
+//    int remove(int id);
 
-    Person create(Person person);
+//    Person create(Person person);
 }

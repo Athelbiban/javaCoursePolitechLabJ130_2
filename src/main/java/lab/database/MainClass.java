@@ -1,14 +1,35 @@
 package lab.database;
 
 import java.sql.*;
+import java.util.Arrays;
 
 public class MainClass {
 
     public static void main(String[] args) {
 
-        PersonRepository personRepo = new PersonRepositoryImpl();
+//        Product[] products = new Product[5];
+//        products[0] = new Product("3251615", "Стол кухонный", "белый", 8000, 12);
+//        products[1] = new Product("3251616", "Стол кухонный", null, 8000, 15);
+//        products[2] = new Product("3251617", "Стул столовый \"гусарский\"", "орех", 4000, 0);
+//        products[3] = new Product("3251619", "Стул столовый с высокой спинкой", "белый", 3500, 37);
+//        products[4] = new Product("3251620", "Стул столовый с высокой спинкой", "коричневый", 3500, 52);
+//
+//        for (Product p : products) {
+//            System.out.println(p);
+//        }
 
-        System.out.println(personRepo.findById(150));
+        // загрузить список продуктов и вывести его на экран
+        PersonRepositoryImpl pr = new PersonRepositoryImpl();
+
+//        for (Product p : pr.getAll()) {
+//            System.out.println(p);
+//        }
+
+        pr.printProductsFromOrder(5);
+
+//        PersonRepository personRepo = new PersonRepositoryImpl();
+
+//        System.out.println(personRepo.findById(150));
 
         //personRepo.getAll().forEach(System.out::println);
 //        Person person = personRepo.findById(1);

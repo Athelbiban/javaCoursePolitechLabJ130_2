@@ -3,21 +3,22 @@ package lab.database;
 import java.util.Objects;
 
 public class Person {
+
     private Integer id;
-    private String jobtitle;
-    private String firstnamelastname;
+    private String name;
     private String phone;
     private String email;
+    private String address;
 
-    public Person() {
-    }
+    public Person() {}
 
-    public Person(Integer id, String jobtitle, String firstnamelastname, String phone, String email) {
+    public Person(Integer id, String name, String phone, String email, String address) {
+
         this.id = id;
-        this.jobtitle = jobtitle;
-        this.firstnamelastname = firstnamelastname;
+        this.name = name;
         this.phone = phone;
         this.email = email;
+        this.address = address;
     }
 
     public Integer getId() {
@@ -28,20 +29,12 @@ public class Person {
         this.id = id;
     }
 
-    public String getJobtitle() {
-        return jobtitle;
+    public String getName() {
+        return name;
     }
 
-    public void setJobtitle(String jobtitle) {
-        this.jobtitle = jobtitle;
-    }
-
-    public String getFirstnamelastname() {
-        return firstnamelastname;
-    }
-
-    public void setFirstnamelastname(String firstnamelastname) {
-        this.firstnamelastname = firstnamelastname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {
@@ -60,27 +53,39 @@ public class Person {
         this.email = email;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(id, person.id) && Objects.equals(firstnamelastname, person.firstnamelastname);
+        return Objects.equals(id, person.id) && Objects.equals(name, person.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstnamelastname);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
+
         return "Person{" +
                 "id=" + id +
-                ", jobtitle='" + jobtitle + '\'' +
-                ", firstnamelastname='" + firstnamelastname + '\'' +
+                ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", address ='" + address + '\'' +
                 '}';
     }
+
+
 }
