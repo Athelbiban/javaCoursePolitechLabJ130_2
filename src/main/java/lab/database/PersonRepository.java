@@ -8,6 +8,7 @@ public interface PersonRepository {
     List<Product> getAll();
 
     void printProductsFromOrder(int id);
+    void orderRegistration(Order order);
 
 //    Person findByJobtitleNamePhoneEmail(String jobtitle, String name, String phone, String email);
 

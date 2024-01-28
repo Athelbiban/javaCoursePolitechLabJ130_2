@@ -26,7 +26,8 @@ public class PersonRepositoryImpl implements PersonRepository{
                         "FROM products pr " +
                             "LEFT JOIN position p USING(article) " +
                             "LEFT JOIN orders o USING(order_id) " +
-                        "GROUP BY article;"
+                        "GROUP BY article " +
+                        "ORDER BY article;"
             );
 
             while (rs.next()){
@@ -67,6 +68,11 @@ public class PersonRepositoryImpl implements PersonRepository{
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public void orderRegistration(Order order) {
+
     }
 
 //    @Override
