@@ -25,7 +25,7 @@ public class MainClass {
 //            System.out.println(p);
 //        }
 
-        pr.printProductsFromOrder(5);
+        pr.printProductsFromOrder(1);
 
 //        PersonRepository personRepo = new PersonRepositoryImpl();
 
