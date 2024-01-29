@@ -2,6 +2,8 @@ package lab.database;
 
 import java.sql.*;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public class MainClass {
 
@@ -25,7 +27,18 @@ public class MainClass {
 //            System.out.println(p);
 //        }
 
-        pr.printProductsFromOrder(1);
+//        pr.printProductsFromOrder(3);
+
+        Person person = new Person(5, "Стас Востров", "(981)987-65-43", "vostrov@gmail.com", "ул. Книпович, 4-1");
+//        Product product1 = new Product("3251616", "Стол кухонный", null, 8000, 15);
+
+        LinkedHashMap<String, Integer> productMap = new LinkedHashMap<>();
+        productMap.put("3251616", 1);
+        productMap.put("3251620", 1);
+        productMap.put("3251619", 2);
+
+        Order order = new Order(person, productMap);
+        pr.toOrder(order);
 
 //        PersonRepository personRepo = new PersonRepositoryImpl();
 

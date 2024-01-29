@@ -1,5 +1,7 @@
 package lab.database;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,111 +61,51 @@ public class PersonRepositoryImpl implements PersonRepository{
                         "GROUP BY article;"
             );
 
-            while (rs.next()){
+            while (rs.next()) {
                 String name = rs.getString("product_name");
                 String color = rs.getString("color");
                 System.out.println(color != null ? name + " " + color : name);
             }
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
     @Override
-    public void orderRegistration(Order order) {
+    public void toOrder(Order order) {
+
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+
+             int result = statement.executeUpdate(
+                     "INSERT orders (order_create, customer_name, customer_phone, customer_email, customer_address, order_status, order_shipment) VALUES " +
+                             "(" +
+                             "CURDATE(), " +
+                             "\"" + order.getPerson().getName() + "\"" + ", " +
+                             "\"" + order.getPerson().getPhone() + "\"" + ", " +
+                             "\"" + order.getPerson().getEmail() + "\"" + ", " +
+                             "\"" + order.getPerson().getAddress() + "\"" + ", " +
+                             "'P', " +
+                             "NULL" +
+                             ");"
+             );
+
+            System.out.println("Добавлено строк: " + result);
+
+            int result2 = statement.executeUpdate(
+                    "INSERT position VALUES " +
+                            "(" +
+                            order.getPerson().getId() + ", " +
+                            "\"" + order.getProductMap() + "\"" + ", " +
+                            ");"
+            );
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
-
-//    @Override
-//    public Person findById(int id) {
-//        Person person = null;
-//        try ( Connection connection = getConnection();
-//              Statement statement = connection.createStatement()) {
-//            ResultSet rs = statement.executeQuery("select * from person where id=" + id);
-//            if(rs.next()) {
-//                String jobtitle = rs.getString("jobtitle");
-//                String firstnamelastname = rs.getString("firstnamelastname");
-//                String phone = rs.getString("phone");
-//                String email = rs.getString("email");
-//                person = new Person(id, jobtitle, firstnamelastname, phone, email);
-//            }
-//        }catch (SQLException e){
-//
-//        }
-//        return person;
-//    }
-
-//    @Override
-//    public Person findByJobtitleNamePhoneEmail(String jobtitle, String name, String phone, String email) {
-//        Person person = null;
-//        String sql = "select * from person where jobtitle=? and firstnamelastname=? and phone=? and email=?";
-//        try ( Connection connection = getConnection();
-//              PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, jobtitle);
-//            ps.setString(2, name);
-//            ps.setString(3, phone);
-//            ps.setString(4, email);
-//            ResultSet rs = ps.executeQuery();
-//            if(rs.next()) {
-//                Integer id = rs.getInt("id");
-//                String jobt = rs.getString("jobtitle");
-//                String firstnamelastname = rs.getString("firstnamelastname");
-//                String phonee = rs.getString("phone");
-//                String emaill = rs.getString("email");
-//                person = new Person(id, jobt, firstnamelastname, phonee, emaill);
-//            }
-//        }catch (SQLException e){
-//
-//        }
-//        return person;
-//    }
-
-//    @Override
-//    public Person update(Person person) {
-//        String sql = "update person set jobtitle=?, phone=?, email=? where id=?";
-//        try ( Connection connection = getConnection();
-//              PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setInt(4, person.getId());
-//            ps.setString(1, person.getJobtitle());
-//            ps.setString(2, person.getPhone());
-//            ps.setString(3, person.getEmail());
-//            ps.execute();
-//        }catch (SQLException e){
-//
-//        }
-//        return findById(person.getId());
-//    }
-
-//    @Override
-//    public int remove(int id) {
-//        int count = 0;
-//        try ( Connection connection = getConnection();
-//              Statement statement = connection.createStatement()) {
-//            count = statement.executeUpdate("delete from person where id=" + id);
-//        }catch (SQLException e){
-//
-//        }
-//        return count;
-//    }
-
-//    @Override
-//    public Person create(Person person) {
-//        String sql = "insert into person (jobtitle, firstnamelastname, phone, email) value (?, ?, ?, ?)";
-//        try ( Connection connection = getConnection();
-//              PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, person.getJobtitle());
-//            ps.setString(2, person.getFirstnamelastname());
-//            ps.setString(3, person.getPhone());
-//            ps.setString(4, person.getEmail());
-//            ps.execute();
-//        }catch (SQLException e){
-//
-//        }
-//        return findByJobtitleNamePhoneEmail(person.getJobtitle(), person.getFirstnamelastname(), person.getPhone(), person.getEmail());
-//    }
-
-
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
