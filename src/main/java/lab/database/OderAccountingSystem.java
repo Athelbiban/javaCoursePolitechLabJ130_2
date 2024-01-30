@@ -71,7 +71,8 @@ public class OderAccountingSystem {
              Statement statement = connection.createStatement()) {
 
             int result = statement.executeUpdate(
-                     "INSERT orders (order_create, customer_name, customer_phone, customer_email, customer_address, order_status, order_shipment) VALUES (" +
+                     "INSERT orders (order_create, customer_name, customer_phone, customer_email," +
+                             "customer_address, order_status, order_shipment) VALUES (" +
                              "CURDATE(), " +
                              "\"" + order.getPerson().getName() + "\", " +
                              "\"" + order.getPerson().getPhone() + "\", " +
