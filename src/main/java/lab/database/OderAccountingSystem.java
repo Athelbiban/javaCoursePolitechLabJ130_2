@@ -1,21 +1,15 @@
 package lab.database;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PersonRepositoryImpl implements PersonRepository{
+public class OderAccountingSystem {
 
     private static final String URL = "jdbc:mysql://localhost:3306/store";
     private static final String USER = "root";
     private static final String PASSWORD = "143";
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
 
-    @Override
     public List<Product> getAll() {
 
         List<Product> products = new LinkedList<>();
@@ -48,7 +42,6 @@ public class PersonRepositoryImpl implements PersonRepository{
         return products;
     }
 
-    @Override
     public void printProductsFromOrder(int id) {
 
         try (Connection connection = getConnection();
@@ -72,34 +65,37 @@ public class PersonRepositoryImpl implements PersonRepository{
         }
     }
 
-    @Override
     public void toOrder(Order order) {
 
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
 
-             int result = statement.executeUpdate(
-                     "INSERT orders (order_create, customer_name, customer_phone, customer_email, customer_address, order_status, order_shipment) VALUES " +
-                             "(" +
+            int result = statement.executeUpdate(
+                     "INSERT orders (order_create, customer_name, customer_phone, customer_email, customer_address, order_status, order_shipment) VALUES (" +
                              "CURDATE(), " +
-                             "\"" + order.getPerson().getName() + "\"" + ", " +
-                             "\"" + order.getPerson().getPhone() + "\"" + ", " +
-                             "\"" + order.getPerson().getEmail() + "\"" + ", " +
-                             "\"" + order.getPerson().getAddress() + "\"" + ", " +
+                             "\"" + order.getPerson().getName() + "\", " +
+                             "\"" + order.getPerson().getPhone() + "\", " +
+                             "\"" + order.getPerson().getEmail() + "\", " +
+                             "\"" + order.getPerson().getAddress() + "\", " +
                              "'P', " +
                              "NULL" +
-                             ");"
-             );
-
-            System.out.println("Добавлено строк: " + result);
-
-            int result2 = statement.executeUpdate(
-                    "INSERT position VALUES " +
-                            "(" +
-                            order.getPerson().getId() + ", " +
-                            "\"" + order.getProductMap() + "\"" + ", " +
-                            ");"
+                         ");"
             );
+
+            for (String k : order.getProductMap().keySet()) {
+
+                statement.executeUpdate(
+                        "INSERT position VALUES (" +
+                                "(SELECT MAX(order_id) FROM orders), " +
+                                "\"" + k + "\", " +
+                                "(SELECT price FROM products WHERE article = \"" + k + "\"), " +
+                                order.getProductMap().get(k) +
+                            ");"
+                );
+            }
+
+            System.out.println("In table 'orders' add lines: " + result);
+            System.out.println("In table 'position' add lines: " + order.getProductMap().keySet().toArray().length);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
