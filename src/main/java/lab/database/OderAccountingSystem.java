@@ -8,7 +8,7 @@ public class OderAccountingSystem {
 
     private static final String URL = "jdbc:mysql://localhost:3306/store";
     private static final String USER = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "143";
 
     public List<Product> getAll() {
 
@@ -67,6 +67,7 @@ public class OderAccountingSystem {
 
     public void toOrder(Order order) {
 
+        int rows1, rows2 = 0;
         String sqlQuery = "INSERT orders (order_create, customer_name, customer_phone, " +
                 "customer_email, customer_address, order_status, order_shipment) " +
                 "VALUES (CURDATE(), ?, ?, ?, ?, \"P\", NULL)";
@@ -80,11 +81,11 @@ public class OderAccountingSystem {
             prepared.setString(3, order.getPerson().getEmail());
             prepared.setString(4, order.getPerson().getAddress());
 
-            prepared.executeUpdate();
+            rows1 = prepared.executeUpdate();
 
             for (String k : order.getProductMap().keySet()) {
 
-                statement.executeUpdate(
+                rows2 += statement.executeUpdate(
                         "INSERT position VALUES (" +
                                 "(SELECT MAX(order_id) FROM orders), " +
                                 "\"" + k + "\", " +
@@ -93,6 +94,9 @@ public class OderAccountingSystem {
                                 ");"
                 );
             }
+
+        System.out.println("В таблицу 'orders' добавлено строк: " + rows1);
+        System.out.println("В таблицу 'position' добавлено строк: " + rows2);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
