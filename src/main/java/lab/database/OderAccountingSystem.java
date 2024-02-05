@@ -8,7 +8,7 @@ public class OderAccountingSystem {
 
     private static final String URL = "jdbc:mysql://localhost:3306/store";
     private static final String USER = "root";
-    private static final String PASSWORD = "143";
+    private static final String PASSWORD = "root";
 
     public List<Product> getAll() {
 
@@ -67,21 +67,20 @@ public class OderAccountingSystem {
 
     public void toOrder(Order order) {
 
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
+        String sqlQuery = "INSERT orders (order_create, customer_name, customer_phone, " +
+                "customer_email, customer_address, order_status, order_shipment) " +
+                "VALUES (CURDATE(), ?, ?, ?, ?, \"P\", NULL)";
 
-            int result = statement.executeUpdate(
-                     "INSERT orders (order_create, customer_name, customer_phone, customer_email," +
-                             "customer_address, order_status, order_shipment) VALUES (" +
-                             "CURDATE(), " +
-                             "\"" + order.getPerson().getName() + "\", " +
-                             "\"" + order.getPerson().getPhone() + "\", " +
-                             "\"" + order.getPerson().getEmail() + "\", " +
-                             "\"" + order.getPerson().getAddress() + "\", " +
-                             "'P', " +
-                             "NULL" +
-                         ");"
-            );
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement();
+             PreparedStatement prepared = connection.prepareStatement(sqlQuery)) {
+
+            prepared.setString(1, order.getPerson().getName());
+            prepared.setString(2, order.getPerson().getPhone());
+            prepared.setString(3, order.getPerson().getEmail());
+            prepared.setString(4, order.getPerson().getAddress());
+
+            prepared.executeUpdate();
 
             for (String k : order.getProductMap().keySet()) {
 
@@ -91,12 +90,9 @@ public class OderAccountingSystem {
                                 "\"" + k + "\", " +
                                 "(SELECT price FROM products WHERE article = \"" + k + "\"), " +
                                 order.getProductMap().get(k) +
-                            ");"
+                                ");"
                 );
             }
-
-            System.out.println("In table 'orders' add lines: " + result);
-            System.out.println("In table 'position' add lines: " + order.getProductMap().keySet().toArray().length);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
